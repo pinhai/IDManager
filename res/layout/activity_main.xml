@@ -1,0 +1,84 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.hai.idmanager.MainActivity" >
+    
+	<LinearLayout 
+	    android:id="@+id/linear_top"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:paddingTop="8dp"
+	    android:paddingBottom="8dp"
+	    android:paddingLeft="10dp"
+	    android:paddingRight="10dp"
+	    android:background="@color/bg_gray">
+	    <LinearLayout 
+	        android:id="@+id/linear_search"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal"
+	        android:padding="5dp"
+	        android:gravity="center"
+	        android:background="@drawable/box_corner_white">
+	        <ImageView 
+	            android:contentDescription="@string/txt_search"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:background="@drawable/icon_search"/>
+	        <TextView 
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/txt_search"
+	            android:textColor="@color/bg_gray"/>
+	    </LinearLayout>
+	</LinearLayout>
+	
+	<!-- <com.hai.idmanager.custom.AutoLoadStaggeredGridView 
+	    xmlns:app="http://schemas.android.com/apk/res-auto"
+       	xmlns:ptr="http://schemas.android.com/apk/res-auto"
+	    android:id="@+id/gv_autoload"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_below="@+id/linear_top"
+	    android:layout_above="@+id/linear_bottom"
+	    ptr:ptrMode="pullDownFromTop"
+       	app:item_margin="5dp"
+       	app:column_count="1" /> -->
+       	
+    <com.handmark.pulltorefresh.library.PullToRefreshListView 
+        xmlns:ptr="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/ptrlv_idInfo"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+	    android:paddingLeft="5dp"
+	    android:paddingRight="5dp"
+	    ptr:ptrMode="pullDownFromTop"
+	    android:divider="@android:color/transparent"
+	    android:dividerHeight="5dp"
+        />
+	
+	<LinearLayout 
+	    android:id="@+id/linear_bottom"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:background="@color/bg_gray"
+	    android:gravity="center"
+	    android:padding="5dp"
+	     >
+	    <Button 
+	        android:id="@+id/btn_addId"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:padding="@dimen/btn_padding_top_bottom"
+	        android:background="@drawable/addid_selector"
+	        android:text="添  加"/>
+	</LinearLayout>
+    
+</LinearLayout>
+

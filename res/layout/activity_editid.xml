@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <include layout="@layout/navigation_bar"/>
+    
+    <EditText 
+        android:id="@+id/et_idName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="5dp"
+        android:text="账号名称"
+        android:textSize="@dimen/txt_middleLager"
+        android:background="@drawable/box_white"
+        android:lines="1"
+        android:maxLines="1"
+        />
+    
+    <EditText 
+        android:id="@+id/et_idInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="5dp"
+        android:text="账号信息"
+        android:textSize="@dimen/txt_middleLager"
+        android:background="@drawable/box_white"
+        android:gravity="top|left"
+        android:lines="2"
+        android:maxLines="4"
+        />
+    
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="horizontal"
+        >
+        <Button 
+            android:id="@+id/btn_edit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:text="编辑"
+            android:textSize="@dimen/txt_middle"
+            android:background="@drawable/btn_bg_selector"
+            />
+        <Button 
+            android:id="@+id/btn_submit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:padding="5dp"
+            android:text="完成"
+            android:textSize="@dimen/txt_middle"
+            android:background="@drawable/btn_bg_selector"
+            />
+    </LinearLayout>
+
+</LinearLayout>

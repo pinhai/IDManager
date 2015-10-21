@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">IDManager</string>
+    <string name="txt_search">搜索</string>
+    <string name="menu_import">导入</string>
+    <string name="menu_export">导出</string>
+
+</resources>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linear_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+	<TextView 
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:padding="8dp"
+	    android:background="@color/bg_gray"
+	    android:textSize="@dimen/txt_middleLager"
+	    android:text="添加ID"/>
+	
+	<EditText 
+	    android:id="@+id/et_idName"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:hint="输入ID名"
+	    android:layout_marginLeft="15dp"
+	    android:layout_marginRight="15dp"
+	    android:layout_marginTop="15dp"
+	    android:padding="5dp"
+	    android:maxLines="1"
+	    android:background="@drawable/box_white"
+	    android:textSize="@dimen/txt_middle"/>
+	
+	<EditText 
+	    android:id="@+id/et_idInfo"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:hint="输入ID信息"
+	    android:layout_margin="15dp"
+	    android:padding="5dp"
+	    android:lines="3"
+	    android:maxLines="3"
+	    android:gravity="top"
+	    android:background="@drawable/box_white"
+	    android:textSize="@dimen/txt_middle"/>
+	
+	<LinearLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:paddingLeft="15dp"
+	    android:paddingRight="15dp"
+	    android:gravity="center_vertical">
+	    <Button 
+	        android:id="@+id/btn_confirm"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="4"
+	        android:background="@drawable/btn_bg_selector"
+	        android:padding="@dimen/btn_padding_top_bottom"
+	        android:text="确 定"/>
+	    <View 
+	        android:layout_width="0dp"
+	        android:layout_height="match_parent"
+	        android:layout_weight="1"/>
+	    <Button 
+	        android:id="@+id/btn_cancle"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="4"
+	        android:background="@drawable/btn_bg_selector"
+	        android:padding="@dimen/btn_padding_top_bottom"
+	        android:text="取 消"/>
+	</LinearLayout>
+    
+</LinearLayout>
