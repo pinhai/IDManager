@@ -69,7 +69,7 @@
 	    android:orientation="horizontal"
 	    android:background="@color/bg_gray"
 	    android:gravity="center"
-	    android:padding="5dp"
+	    android:padding="2dp"
 	     >
 	    <Button 
 	        android:id="@+id/btn_addId"
@@ -77,6 +77,7 @@
 	        android:layout_height="wrap_content"
 	        android:padding="@dimen/btn_padding_top_bottom"
 	        android:background="@drawable/addid_selector"
+	        android:textSize="@dimen/txt_middle"
 	        android:text="添  加"/>
 	</LinearLayout>
     

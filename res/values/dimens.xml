@@ -8,7 +8,7 @@
     <dimen name="indicator_corner_radius">12dp</dimen>
     <dimen name="header_footer_left_right_padding">24dp</dimen>
     <dimen name="header_footer_top_bottom_padding">12dp</dimen>
-    <dimen name="btn_padding_top_bottom">8dp</dimen>
+    <dimen name="btn_padding_top_bottom">10dp</dimen>
     
     <dimen name="txt_small">12sp</dimen>
     <dimen name="txt_smallMiddle">14sp</dimen>
