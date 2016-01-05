@@ -80,7 +80,7 @@ public class MainActivity extends BaseActivity implements OnClickListener{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
+		
 		initData();
 		initView();
 	}
@@ -145,6 +145,7 @@ public class MainActivity extends BaseActivity implements OnClickListener{
 				Toast.makeText(this, "导出失败，请重试", Toast.LENGTH_SHORT).show();
 			}
 		}else if(id == R.id.item_import){
+			//导入
 			Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 			intent.setType("file/");
 			try{
@@ -298,7 +299,8 @@ public class MainActivity extends BaseActivity implements OnClickListener{
 
 		@Override
 		public void onErrorResponse(int error) {
-			
+			ptrlv_idInfo.onRefreshComplete();
+			Toast.makeText(MainActivity.this, "数据获取失败", Toast.LENGTH_SHORT).show();
 		}
 		
 	};

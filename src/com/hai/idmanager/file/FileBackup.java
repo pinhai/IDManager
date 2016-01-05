@@ -82,7 +82,13 @@ public class FileBackup {
 		
 	}
 	
-	
+	/**
+	 * 导入信息
+	 * @param context
+	 * @param uri
+	 * @param onImportIdInfoListener
+	 * @return
+	 */
 	@SuppressLint("SdCardPath")
 	@SuppressWarnings({ })
 	public static boolean importIdInfo(Context context, Uri uri, OnImportIdInfoListener onImportIdInfoListener){

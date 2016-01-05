@@ -23,22 +23,27 @@ public class HomePageApi {
 	 * @param response
 	 */
 	public void getIdList(int page, FormResponse<PageModel<IdModel>> response){
-		List<IdModel> idListModel = dbHelper.queryIdInfoByPage(0);
-		int pageTatol = 0;
-		if(idListModel.size()%countPerPage == 0){
-			pageTatol = idListModel.size()/countPerPage;
-		}else{
-			pageTatol = idListModel.size()/countPerPage + 1;
+		try {
+			List<IdModel> idListModel = dbHelper.queryIdInfoByPage(0);
+			int pageTatol = 0;
+			if(idListModel.size()%countPerPage == 0){
+				pageTatol = idListModel.size()/countPerPage;
+			}else{
+				pageTatol = idListModel.size()/countPerPage + 1;
+			}
+			PageModel<IdModel> pageModel = new PageModel<>();
+			pageModel.setTotalCount(idListModel.size());
+			pageModel.setTotalPage(pageTatol);
+			List<IdModel> data = new ArrayList<>();
+			for(int i=countPerPage*page-10; i<countPerPage*page && i<idListModel.size(); i++){
+				data.add(idListModel.get(i));
+			}
+			pageModel.setDatas(data);
+			
+			response.onResponse(pageModel);
+		} catch (Exception e) {
+			response.onErrorResponse(110);
 		}
-		PageModel<IdModel> pageModel = new PageModel<>();
-		pageModel.setTotalCount(idListModel.size());
-		pageModel.setTotalPage(pageTatol);
-		List<IdModel> data = new ArrayList<>();
-		for(int i=countPerPage*page-10; i<countPerPage*page && i<idListModel.size(); i++){
-			data.add(idListModel.get(i));
-		}
-		pageModel.setDatas(data);
 		
-		response.onResponse(pageModel);
 	}
 }
