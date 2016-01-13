@@ -53,7 +53,7 @@ public class MainActivity extends BaseActivity implements OnClickListener{
 	private PullToRefreshListView ptrlv_idInfo;
 	private ListView lv_idInfo;
 	private LoadMoreView loadMoreView ;
-	
+	 
 	private List<IdModel> mIdModels;
 	private IdListAdapter mIdListAdapter;
 	
