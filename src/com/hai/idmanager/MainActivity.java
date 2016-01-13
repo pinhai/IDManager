@@ -45,6 +45,7 @@ import com.hai.sqlite.DbHelper;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.State;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 public class MainActivity extends BaseActivity implements OnClickListener{
@@ -164,7 +165,7 @@ public class MainActivity extends BaseActivity implements OnClickListener{
 		// TODO Auto-generated method stub
 		switch (keyCode) {
 		case KeyEvent.KEYCODE_BACK:
-			if(searchIdInfoView.isShowing()){
+			if(searchIdInfoView != null && searchIdInfoView.isShowing()){
 				searchIdInfoView.dismiss();
 			}else{
 				long currentTimeMills = System.currentTimeMillis();
@@ -294,7 +295,7 @@ public class MainActivity extends BaseActivity implements OnClickListener{
 			mIdModels.addAll(response.getDatas());
 			mIdListAdapter.notifyDataSetChanged();
 			dialog.dismiss();
-			ptrlv_idInfo.onRefreshComplete();
+//			ptrlv_idInfo.onRefreshComplete();
 		}
 
 		@Override
