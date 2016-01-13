@@ -3,7 +3,7 @@
     package="com.hai.idmanager"
     android:versionCode="150411"
     android:versionName="1.2.1" android:installLocation="auto">
-
+ 
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="19" />
