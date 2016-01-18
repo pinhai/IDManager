@@ -34,6 +34,7 @@ public class HomePageApi {
 			PageModel<IdModel> pageModel = new PageModel<>();
 			pageModel.setTotalCount(idListModel.size());
 			pageModel.setTotalPage(pageTatol);
+			pageModel.setIndex(page);
 			List<IdModel> data = new ArrayList<>();
 			for(int i=countPerPage*page-10; i<countPerPage*page && i<idListModel.size(); i++){
 				data.add(idListModel.get(i));

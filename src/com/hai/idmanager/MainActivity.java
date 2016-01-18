@@ -45,6 +45,7 @@ import com.hai.sqlite.DbHelper;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.State;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
@@ -275,9 +276,6 @@ public class MainActivity extends BaseActivity implements OnClickListener{
 		@Override
 		public void doRequest(int page,
 				FormResponse<PageModel<IdModel>> response) {
-			if(page == 1){
-				mIdModels.clear();
-			}
 			HomePageApi homePageApi = new HomePageApi(MainActivity.this);
 			homePageApi.getIdList(page, response);
 		}
@@ -292,10 +290,14 @@ public class MainActivity extends BaseActivity implements OnClickListener{
 			}else{
 				loadMoreView.finish();
 			}
+			if(response.getIndex() == 1){
+				mIdModels.clear();
+				lv_idInfo.setSelection(0);
+			}
 			mIdModels.addAll(response.getDatas());
 			mIdListAdapter.notifyDataSetChanged();
 			dialog.dismiss();
-//			ptrlv_idInfo.onRefreshComplete();
+			ptrlv_idInfo.onRefreshComplete();
 		}
 
 		@Override
@@ -371,15 +373,15 @@ public class MainActivity extends BaseActivity implements OnClickListener{
 		}
 	};
 	
-	private OnRefreshListener<ListView> onRefreshListener = new OnRefreshListener<ListView>() {
-
-		@Override
-		public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-			mIdItemPage.init();
-		}
-	};
+//	private OnRefreshListener<ListView> onRefreshListener = new OnRefreshListener<ListView>() {
+//
+//		@Override
+//		public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+////			mIdItemPage.init();
+//		}
+//	};
 	
-	/*private OnRefreshListener2<ListView> onRefreshListener = new OnRefreshListener2<ListView>() {
+	private OnRefreshListener2<ListView> onRefreshListener = new OnRefreshListener2<ListView>() {
 
 		@Override
 		public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
@@ -389,7 +391,7 @@ public class MainActivity extends BaseActivity implements OnClickListener{
 		@Override
 		public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
 		}
-	};*/
+	};
 	
 	private OnImportIdInfoListener onImportIdInfoListener = new OnImportIdInfoListener() {
 		
