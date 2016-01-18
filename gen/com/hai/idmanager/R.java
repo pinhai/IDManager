@@ -1275,6 +1275,7 @@ containing a value of this type.
         public static final int image=0x7f050033;
         public static final int item_export=0x7f050066;
         public static final int item_import=0x7f050065;
+        public static final int item_upload=0x7f050067;
         public static final int iv_envelop=0x7f050064;
         public static final int linear_bottom=0x7f050050;
         public static final int linear_container=0x7f05005c;
@@ -1438,6 +1439,7 @@ containing a value of this type.
         public static final int app_name=0x7f0a0013;
         public static final int menu_export=0x7f0a0016;
         public static final int menu_import=0x7f0a0015;
+        public static final int menu_upload=0x7f0a0017;
         /**  Just use standard Pull Down String when pulling up. These can be set for languages which require it 
          */
         public static final int pull_to_refresh_from_bottom_pull_label=0x7f0a0010;

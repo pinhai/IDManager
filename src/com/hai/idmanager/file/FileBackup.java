@@ -19,11 +19,12 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hai.idmanager.comm.respentity.IdModel;
+import com.hai.idmanager.util.DateUtil;
 
 public class FileBackup {
 	private static String sdCardPath;
 	private final static String appDirectory = "/IdManager";
-	private final static String fileName = "backup.id";
+	private final static String preFileName = "backup.id";
 	
 	/**
 	 * 以json格式导出账号信息到文本
@@ -33,6 +34,7 @@ public class FileBackup {
 	public static boolean exportIdInfo(List<IdModel> idModels){
 		if(!Environment.isExternalStorageRemovable()){
 			sdCardPath = Environment.getExternalStorageDirectory().toString();
+			String fileName = preFileName + "." + DateUtil.getDateByFormat(System.currentTimeMillis(), "yyyyMMddHHmm");
 			File file = new File(sdCardPath+appDirectory+"/"+fileName);
 			File filePath = new File(sdCardPath+appDirectory);
 			BufferedWriter bw = null;
@@ -98,7 +100,7 @@ public class FileBackup {
 //		String uriStr = uri.toString();
 //		uriStr = uriStr.substring(uriStr.indexOf("/sdcard/"), uriStr.length()-1);
 		File file = new File(uri.getPath());
-		if(!file.getName().equals(fileName)){
+		if(!file.getName().contains(preFileName)){
 			Toast.makeText(context, "不支持的文件类型！", Toast.LENGTH_SHORT).show();
 			return false;
 		}

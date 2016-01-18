@@ -336,6 +336,7 @@ int id ifRoom 0x7f05000a
 int id image 0x7f050033
 int id item_export 0x7f050066
 int id item_import 0x7f050065
+int id item_upload 0x7f050067
 int id iv_envelop 0x7f050064
 int id linear_bottom 0x7f050050
 int id linear_container 0x7f05005c
@@ -442,6 +443,7 @@ int string abc_shareactionprovider_share_with_application 0x7f0a000b
 int string app_name 0x7f0a0013
 int string menu_export 0x7f0a0016
 int string menu_import 0x7f0a0015
+int string menu_upload 0x7f0a0017
 int string pull_to_refresh_from_bottom_pull_label 0x7f0a0010
 int string pull_to_refresh_from_bottom_refreshing_label 0x7f0a0012
 int string pull_to_refresh_from_bottom_release_label 0x7f0a0011

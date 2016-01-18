@@ -45,8 +45,6 @@ import com.hai.sqlite.DbHelper;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.State;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 public class MainActivity extends BaseActivity implements OnClickListener{
@@ -77,6 +75,7 @@ public class MainActivity extends BaseActivity implements OnClickListener{
 	private LinearLayout linear_search;
 	
 	private static final int IMPORT_ID_CODE = 112;
+	private static final int UPLOAD_FILE = 113;	//上传文件
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -147,15 +146,11 @@ public class MainActivity extends BaseActivity implements OnClickListener{
 				Toast.makeText(this, "导出失败，请重试", Toast.LENGTH_SHORT).show();
 			}
 		}else if(id == R.id.item_import){
-			//导入
-			Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-			intent.setType("file/");
-			try{
-				startActivityForResult(intent, IMPORT_ID_CODE);
-			}catch (Exception e) {
-				e.printStackTrace();
-				Toast.makeText(this, "未安装文件管理器", Toast.LENGTH_SHORT).show();
-			}
+			//导入，启动文件管理器
+			openFileBrowser(IMPORT_ID_CODE);
+		}else if(id == R.id.item_upload){
+			//上传文件
+			openFileBrowser(UPLOAD_FILE);
 		}
 		
 		return super.onOptionsItemSelected(item);
@@ -197,6 +192,17 @@ public class MainActivity extends BaseActivity implements OnClickListener{
 			break;
 		default:
 			break;
+		}
+	}
+	
+	private void openFileBrowser(int requestCode){
+		Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+		intent.setType("file/");
+		try{
+			startActivityForResult(intent, requestCode);
+		}catch (Exception e) {
+			e.printStackTrace();
+			Toast.makeText(this, "未安装文件管理器", Toast.LENGTH_SHORT).show();
 		}
 	}
 	
@@ -269,6 +275,10 @@ public class MainActivity extends BaseActivity implements OnClickListener{
 		}else if(requestCode == IMPORT_ID_CODE && data != null){
 			Uri uri = data.getData();
 			FileBackup.importIdInfo(this, uri, onImportIdInfoListener);
+		}else if(requestCode == UPLOAD_FILE && data != null){
+			//上传
+			Uri uri = data.getData();
+			
 		}
 	}
 	
@@ -373,25 +383,25 @@ public class MainActivity extends BaseActivity implements OnClickListener{
 		}
 	};
 	
-//	private OnRefreshListener<ListView> onRefreshListener = new OnRefreshListener<ListView>() {
-//
-//		@Override
-//		public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-////			mIdItemPage.init();
-//		}
-//	};
-	
-	private OnRefreshListener2<ListView> onRefreshListener = new OnRefreshListener2<ListView>() {
+	private OnRefreshListener<ListView> onRefreshListener = new OnRefreshListener<ListView>() {
 
 		@Override
-		public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+		public void onRefresh(PullToRefreshBase<ListView> refreshView) {
 			mIdItemPage.init();
 		}
-
-		@Override
-		public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-		}
 	};
+	
+//	private OnRefreshListener2<ListView> onRefreshListener = new OnRefreshListener2<ListView>() {
+//
+//		@Override
+//		public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+//			mIdItemPage.init();
+//		}
+//
+//		@Override
+//		public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+//		}
+//	};
 	
 	private OnImportIdInfoListener onImportIdInfoListener = new OnImportIdInfoListener() {
 		
