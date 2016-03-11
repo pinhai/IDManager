@@ -282,13 +282,13 @@ public class MainActivity extends BaseActivity implements OnClickListener{
 		}else if(requestCode == UPLOAD_FILE && data != null){
 			//上传
 			Uri uri = data.getData();
-			Log.v(TAG, "上传uri：" + uri.toString());
+			Log.v(TAG, "分享uri：" + uri.toString());
 			shareAPP(uri);
 		}
 	}
 	
-	//分享下载页
-    public void shareAPP(Uri uri) {
+	//分享文件
+    private void shareAPP(Uri uri) {
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.setType("*/*");
