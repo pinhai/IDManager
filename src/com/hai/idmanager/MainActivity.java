@@ -1,5 +1,6 @@
 package com.hai.idmanager;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -48,6 +50,8 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 public class MainActivity extends BaseActivity implements OnClickListener{
+	private static final String TAG = "MainActivity";
+	
 	private Button btn_addId;
 	private PullToRefreshListView ptrlv_idInfo;
 	private ListView lv_idInfo;
@@ -278,9 +282,19 @@ public class MainActivity extends BaseActivity implements OnClickListener{
 		}else if(requestCode == UPLOAD_FILE && data != null){
 			//上传
 			Uri uri = data.getData();
-			
+			Log.v(TAG, "上传uri：" + uri.toString());
+			shareAPP(uri);
 		}
 	}
+	
+	//分享下载页
+    public void shareAPP(Uri uri) {
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.setType("*/*");
+        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(uri.getPath())));
+        startActivity(Intent.createChooser(shareIntent, "分享到"));
+    }
 	
 	private DoRequest<IdModel> idItemReq = new DoRequest<IdModel>() {
 		@Override
