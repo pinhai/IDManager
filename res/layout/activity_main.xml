@@ -51,24 +51,33 @@
 	    android:dividerHeight="5dp"
         />
 	
-	<LinearLayout 
+	<RelativeLayout 
 	    android:id="@+id/linear_bottom"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    android:orientation="horizontal"
 	    android:background="@color/bg_gray"
-	    android:gravity="center"
+	    android:gravity="center_vertical"
 	    android:padding="2dp"
 	     >
 	    <Button 
-	        android:id="@+id/btn_addId"
+	        android:id="@+id/btn_menu"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:padding="@dimen/btn_padding_top_bottom"
 	        android:background="@drawable/addid_selector"
 	        android:textSize="@dimen/txt_middle"
+	        android:text="菜单"
+	        />
+	    <Button 
+	        android:id="@+id/btn_addId"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerInParent="true"
+	        android:padding="@dimen/btn_padding_top_bottom"
+	        android:background="@drawable/addid_selector"
+	        android:textSize="@dimen/txt_middle"
 	        android:text="添  加"/>
-	</LinearLayout>
+	</RelativeLayout>
     
 </LinearLayout>
 

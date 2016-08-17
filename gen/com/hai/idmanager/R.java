@@ -230,7 +230,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int ptrSubHeaderTextAppearance=0x7f010013;
     }
     public static final class color {
-        public static final int bg_gray=0x7f060000;
+        public static final int bg_gray=0x7f050000;
     }
     public static final class dimen {
         /** 
@@ -239,22 +239,22 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
          would include 7" and 10" devices in landscape (~960dp and ~1280dp respectively).
     
          */
-        public static final int activity_horizontal_margi=0x7f07000d;
+        public static final int activity_horizontal_margi=0x7f06000d;
         /**  Default screen margins, per the Android Design guidelines. 
          */
-        public static final int activity_horizontal_margin=0x7f070000;
-        public static final int activity_vertical_margin=0x7f070001;
-        public static final int btn_padding_top_bottom=0x7f070007;
-        public static final int header_footer_left_right_padding=0x7f070005;
-        public static final int header_footer_top_bottom_padding=0x7f070006;
-        public static final int indicator_corner_radius=0x7f070004;
-        public static final int indicator_internal_padding=0x7f070003;
-        public static final int indicator_right_padding=0x7f070002;
-        public static final int txt_large=0x7f07000c;
-        public static final int txt_middle=0x7f07000a;
-        public static final int txt_middleLager=0x7f07000b;
-        public static final int txt_small=0x7f070008;
-        public static final int txt_smallMiddle=0x7f070009;
+        public static final int activity_horizontal_margin=0x7f060000;
+        public static final int activity_vertical_margin=0x7f060001;
+        public static final int btn_padding_top_bottom=0x7f060007;
+        public static final int header_footer_left_right_padding=0x7f060005;
+        public static final int header_footer_top_bottom_padding=0x7f060006;
+        public static final int indicator_corner_radius=0x7f060004;
+        public static final int indicator_internal_padding=0x7f060003;
+        public static final int indicator_right_padding=0x7f060002;
+        public static final int txt_large=0x7f06000c;
+        public static final int txt_middle=0x7f06000a;
+        public static final int txt_middleLager=0x7f06000b;
+        public static final int txt_small=0x7f060008;
+        public static final int txt_smallMiddle=0x7f060009;
     }
     public static final class drawable {
         public static final int addid_selector=0x7f020000;
@@ -271,50 +271,51 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int indicator_bg_top=0x7f02000b;
     }
     public static final class id {
-        public static final int both=0x7f050003;
-        public static final int btn_addId=0x7f050015;
-        public static final int btn_back=0x7f050019;
-        public static final int btn_cancel=0x7f050025;
-        public static final int btn_cancle=0x7f050022;
-        public static final int btn_confirm=0x7f050021;
-        public static final int btn_delId=0x7f050023;
-        public static final int btn_edit=0x7f05000e;
-        public static final int btn_submit=0x7f05000f;
-        public static final int container=0x7f050010;
-        public static final int disabled=0x7f050000;
-        public static final int et_idInfo=0x7f05000d;
-        public static final int et_idName=0x7f05000c;
-        public static final int et_search=0x7f050024;
-        public static final int fl_envelop=0x7f050026;
-        public static final int fl_inner=0x7f05001b;
-        public static final int flip=0x7f050008;
-        public static final int gridview=0x7f050009;
-        public static final int item_export=0x7f05002a;
-        public static final int item_import=0x7f050029;
-        public static final int item_upload=0x7f05002b;
-        public static final int iv_envelop=0x7f050028;
-        public static final int linear_bottom=0x7f050014;
-        public static final int linear_container=0x7f050020;
-        public static final int linear_search=0x7f050012;
-        public static final int linear_top=0x7f050011;
-        public static final int lv_searchingId=0x7f050027;
-        public static final int manualOnly=0x7f050004;
-        public static final int ptrlv_idInfo=0x7f050013;
-        public static final int pullDownFromTop=0x7f050005;
-        public static final int pullFromEnd=0x7f050002;
-        public static final int pullFromStart=0x7f050001;
-        public static final int pullUpFromBottom=0x7f050006;
-        public static final int pull_to_refresh_image=0x7f05001c;
-        public static final int pull_to_refresh_progress=0x7f05001d;
-        public static final int pull_to_refresh_sub_text=0x7f05001f;
-        public static final int pull_to_refresh_text=0x7f05001e;
-        public static final int rotate=0x7f050007;
-        public static final int scrollview=0x7f05000b;
-        public static final int tv_idInfo=0x7f050017;
-        public static final int tv_idName=0x7f050016;
-        public static final int tv_title=0x7f05001a;
-        public static final int txt_load_more=0x7f050018;
-        public static final int webview=0x7f05000a;
+        public static final int both=0x7f070003;
+        public static final int btn_addId=0x7f070016;
+        public static final int btn_back=0x7f07001a;
+        public static final int btn_cancel=0x7f070026;
+        public static final int btn_cancle=0x7f070023;
+        public static final int btn_confirm=0x7f070022;
+        public static final int btn_delId=0x7f070024;
+        public static final int btn_edit=0x7f07000e;
+        public static final int btn_menu=0x7f070015;
+        public static final int btn_submit=0x7f07000f;
+        public static final int container=0x7f070010;
+        public static final int disabled=0x7f070004;
+        public static final int et_idInfo=0x7f07000d;
+        public static final int et_idName=0x7f07000c;
+        public static final int et_search=0x7f070025;
+        public static final int fl_envelop=0x7f070027;
+        public static final int fl_inner=0x7f07001c;
+        public static final int flip=0x7f07000a;
+        public static final int gridview=0x7f070000;
+        public static final int item_export=0x7f07002b;
+        public static final int item_import=0x7f07002a;
+        public static final int item_upload=0x7f07002c;
+        public static final int iv_envelop=0x7f070029;
+        public static final int linear_bottom=0x7f070014;
+        public static final int linear_container=0x7f070021;
+        public static final int linear_search=0x7f070012;
+        public static final int linear_top=0x7f070011;
+        public static final int lv_searchingId=0x7f070028;
+        public static final int manualOnly=0x7f070005;
+        public static final int ptrlv_idInfo=0x7f070013;
+        public static final int pullDownFromTop=0x7f070006;
+        public static final int pullFromEnd=0x7f070007;
+        public static final int pullFromStart=0x7f070008;
+        public static final int pullUpFromBottom=0x7f070009;
+        public static final int pull_to_refresh_image=0x7f07001d;
+        public static final int pull_to_refresh_progress=0x7f07001e;
+        public static final int pull_to_refresh_sub_text=0x7f070020;
+        public static final int pull_to_refresh_text=0x7f07001f;
+        public static final int rotate=0x7f07000b;
+        public static final int scrollview=0x7f070002;
+        public static final int tv_idInfo=0x7f070018;
+        public static final int tv_idName=0x7f070017;
+        public static final int tv_title=0x7f07001b;
+        public static final int txt_load_more=0x7f070019;
+        public static final int webview=0x7f070001;
     }
     public static final class layout {
         public static final int activity_editid=0x7f030000;

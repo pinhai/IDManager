@@ -52,7 +52,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 public class MainActivity extends BaseActivity implements OnClickListener{
 	private static final String TAG = "MainActivity";
 	
-	private Button btn_addId;
+	private Button btn_addId, btn_menu;
 	private PullToRefreshListView ptrlv_idInfo;
 	private ListView lv_idInfo;
 	private LoadMoreView loadMoreView ;
@@ -103,6 +103,8 @@ public class MainActivity extends BaseActivity implements OnClickListener{
 	}
 
 	private void initView() {
+		btn_menu = findView(R.id.btn_menu);
+		btn_menu.setOnClickListener(this);
 		btn_addId = findView(R.id.btn_addId);
 		btn_addId.setOnClickListener(this);
 		ptrlv_idInfo = findView(R.id.ptrlv_idInfo);
@@ -193,6 +195,9 @@ public class MainActivity extends BaseActivity implements OnClickListener{
 			break;
 		case R.id.linear_search:
 			showSearchIdWindow();
+			break;
+		case R.id.btn_menu:
+			openOptionsMenu();
 			break;
 		default:
 			break;
