@@ -118,7 +118,7 @@ public class SearchIdInfoView extends PopupWindow implements OnClickListener{
 			}
 			idModels.clear();
 			for(IdModel idModel : idModelsTotal){
-				if(idModel.getIdName().contains(str)){
+				if(idModel.getIdName().contains(str) || idModel.getIdInfo().contains(str)){
 					idModels.add(idModel);
 				}
 			}
