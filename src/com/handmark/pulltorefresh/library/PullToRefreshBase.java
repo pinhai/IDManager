@@ -304,8 +304,13 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 	@Override
 	public void onRefreshComplete() {
 		if (isRefreshing()) {
-//			setState(State.RESET);
-			setState(State.RESET);
+			postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					setState(State.RESET);
+				}
+			}, 1000);
 		}
 	}
 
