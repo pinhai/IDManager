@@ -19,6 +19,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.util.AttributeSet;
@@ -34,6 +35,43 @@ import com.handmark.pulltorefresh.library.internal.EmptyViewMethodAccessor;
 import com.handmark.pulltorefresh.library.internal.LoadingLayout;
 
 public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView> {
+	
+	private Rect mTouchFrame;
+	/**
+     * Represents an invalid position. All valid positions are in the range 0 to 1 less than the
+     * number of items in the current adapter.
+     */
+    public static final int INVALID_POSITION = -1;
+	
+	/**
+     * Maps a point to a position in the list.
+     *
+     * @param x X in local coordinate
+     * @param y Y in local coordinate
+     * @return The position of the item which contains the specified point, or
+     *         {@link #INVALID_POSITION} if the point does not intersect an item.
+     */
+    public int pointToPosition(int x, int y) {
+        Rect frame = mTouchFrame;
+        if (frame == null) {
+            mTouchFrame = new Rect();
+            frame = mTouchFrame;
+        }
+
+        final int count = getChildCount();
+        for (int i = count - 1; i >= 0; i--) {
+            final View child = getChildAt(i);
+            if (child.getVisibility() == View.VISIBLE) {
+                child.getHitRect(frame);
+                if (frame.contains(x, y)) {
+                    return mFirstPosition + i;
+                }
+            }
+        }
+        return INVALID_POSITION;
+    }
+	
+	
 
 	private LoadingLayout mHeaderLoadingView;
 	private LoadingLayout mFooterLoadingView;
