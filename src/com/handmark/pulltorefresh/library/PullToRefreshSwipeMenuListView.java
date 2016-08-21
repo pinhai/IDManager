@@ -102,7 +102,7 @@ public class PullToRefreshSwipeMenuListView extends PullToRefreshListView {
 		case MotionEvent.ACTION_DOWN:
 			int oldPos = mTouchPosition;
 			mDownX = ev.getX();
-			mDownY = ev.getY();
+			mDownY = ev.getY(); 
 			mTouchState = TOUCH_STATE_NONE;
 
 			mTouchPosition = pointToPosition((int) ev.getX(), (int) ev.getY());
