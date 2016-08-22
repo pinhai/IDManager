@@ -36,7 +36,7 @@
 	    </LinearLayout>
 	</LinearLayout>
 	
-    <com.handmark.pulltorefresh.library.PullToRefreshListView 
+    <com.handmark.pulltorefresh.library.PullToRefreshSwipeMenuListView
         xmlns:ptr="http://schemas.android.com/apk/res-auto"
         android:id="@+id/ptrlv_idInfo"
         android:layout_width="match_parent"

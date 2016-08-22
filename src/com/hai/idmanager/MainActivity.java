@@ -8,10 +8,13 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -24,7 +27,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.hai.idmanager.PageRequest.DoRequest;
@@ -42,19 +44,24 @@ import com.hai.idmanager.ui.DelIdView;
 import com.hai.idmanager.ui.DelIdView.OnDelIdListener;
 import com.hai.idmanager.ui.EditIdActivity;
 import com.hai.idmanager.ui.SearchIdInfoView;
-import com.hai.idmanager.ui.SearchIdInfoView.OnClickSearchingItemListener;
+import com.hai.idmanager.util.DimensionUtil;
 import com.hai.sqlite.DbHelper;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.handmark.pulltorefresh.library.swipemenu.SwipeMenu;
+import com.handmark.pulltorefresh.library.swipemenu.SwipeMenuCreator;
+import com.handmark.pulltorefresh.library.swipemenu.SwipeMenuItem;
+import com.handmark.pulltorefresh.library.swipemenu.SwipeMenuListView;
+import com.handmark.pulltorefresh.library.swipemenu.SwipeMenuListView.OnMenuItemClickListener;
+import com.handmark.pulltorefresh.library.PullToRefreshSwipeMenuListView;
 
 public class MainActivity extends BaseActivity implements OnClickListener{
 	private static final String TAG = "MainActivity";
 	
 	private Button btn_addId, btn_menu;
-	private PullToRefreshListView ptrlv_idInfo;
-	private ListView lv_idInfo;
+	private PullToRefreshSwipeMenuListView ptrlv_idInfo;
+	private SwipeMenuListView smlv_idInfo;
 	private LoadMoreView loadMoreView ;
 	private List<IdModel> mIdModels;
 	private IdListAdapter mIdListAdapter;
@@ -107,11 +114,13 @@ public class MainActivity extends BaseActivity implements OnClickListener{
 		btn_addId = findView(R.id.btn_addId);
 		btn_addId.setOnClickListener(this);
 		ptrlv_idInfo = findView(R.id.ptrlv_idInfo);
-		lv_idInfo = ptrlv_idInfo.getRefreshableView();
-		lv_idInfo.addFooterView(loadMoreView.getView());
-		lv_idInfo.setAdapter(mIdListAdapter);
-		lv_idInfo.setOnItemClickListener(mIdInfoItemClick);
-		lv_idInfo.setOnItemLongClickListener(mIdItemLongClick);
+		smlv_idInfo = ptrlv_idInfo.getRefreshableView();
+		smlv_idInfo.addFooterView(loadMoreView.getView());
+		smlv_idInfo.setAdapter(mIdListAdapter);
+		smlv_idInfo.setOnItemClickListener(mIdInfoItemClick);
+//		lv_idInfo.setOnItemLongClickListener(mIdItemLongClick);
+		smlv_idInfo.setMenuCreator(creator);
+		smlv_idInfo.setOnMenuItemClickListener(onMenuItemClickListener);
 		ptrlv_idInfo.setOnLastItemVisibleListener(mLastItem);
 		ptrlv_idInfo.setOnRefreshListener(onRefreshListener);
 		
@@ -203,6 +212,47 @@ public class MainActivity extends BaseActivity implements OnClickListener{
 		}
 	}
 	
+	private SwipeMenuCreator creator = new SwipeMenuCreator() {
+		@Override
+		public void create(SwipeMenu menu) {
+			// create "delete" item
+			SwipeMenuItem deleteItem = new SwipeMenuItem(getApplicationContext());
+			// set item background
+			deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9, 0x3F, 0x25)));
+			// set item width
+			deleteItem.setWidth(DimensionUtil.dp2px(MainActivity.this, 90));
+			// set a icon
+			deleteItem.setIcon(R.drawable.ic_delete);
+			// add to menu
+			menu.addMenuItem(deleteItem);
+		}
+	};
+	
+	private OnMenuItemClickListener onMenuItemClickListener = new OnMenuItemClickListener() {
+		@Override
+		public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+			switch (index) {
+			case 0:
+				deleteItem(position);
+				break;
+
+			default:
+				break;
+			}
+			return false;
+		}
+	};
+	
+	private void deleteItem(int position){
+		if(dbHelper.delIdInfo(mIdModels.get(position).getId())){
+			mIdModels.remove(position);
+			mIdListAdapter.notifyDataSetChanged();
+			Toast.makeText(MainActivity.this, "删除账号成功", Toast.LENGTH_SHORT).show();
+		}else{
+			Toast.makeText(MainActivity.this, "删除账号失败", Toast.LENGTH_SHORT).show();
+		}
+	}
+	
 	private void openFileBrowser(int requestCode){
 		Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 		intent.setType("file/");
@@ -215,12 +265,17 @@ public class MainActivity extends BaseActivity implements OnClickListener{
 	}
 	
 	private void showSearchIdWindow() {
-		searchIdInfoView = new SearchIdInfoView(this, dbHelper, new OnClickSearchingItemListener() {
+		searchIdInfoView = new SearchIdInfoView(this, dbHelper, new com.hai.idmanager.ui.SearchIdInfoView.OnItemListener() {
 			@Override
-			public void onClickSearchingItem(int id) {
+			public void onClick(int position) {
 				searchIdInfoView.dismiss();
-				IdModel idModel = dbHelper.queryIdInfoById(id);
+				IdModel idModel = dbHelper.queryIdInfoById(mIdModels.get(position).getId());
 				startEditIdActivityForResult(idModel);
+			}
+
+			@Override
+			public void onDelete(int position) {
+				deleteItem(position);
 			}
 		});
 		searchIdInfoView.clearEditText();
@@ -320,7 +375,7 @@ public class MainActivity extends BaseActivity implements OnClickListener{
 			}
 			if(response.getIndex() == 1){
 				mIdModels.clear();
-				lv_idInfo.setSelection(0);
+				smlv_idInfo.setSelection(0);
 			}
 			mIdModels.addAll(response.getDatas());
 			mIdListAdapter.notifyDataSetChanged();
@@ -372,15 +427,11 @@ public class MainActivity extends BaseActivity implements OnClickListener{
 				offsetY = view.getY() + 30;
 			}
 			
-			delIdView = new DelIdView(MainActivity.this, mIdModels.get(p).getId(), new OnDelIdListener() {
+			delIdView = new DelIdView(MainActivity.this, position, new OnDelIdListener() {
 				@Override
-				public void onDelId(int id) {
-					if(dbHelper.delIdInfo(id)){
-						mIdModels.remove(p);
-						mIdListAdapter.notifyDataSetChanged();
-						delIdView.dismiss();
-						Toast.makeText(MainActivity.this, "删除账号成功", Toast.LENGTH_SHORT).show();
-					}
+				public void onDelId(int position) {
+					delIdView.dismiss();
+					deleteItem(position);
 				}
 			});
 			delIdView.showAtLocation(getView(), Gravity.CENTER_HORIZONTAL|Gravity.TOP, 0, (int) offsetY);
@@ -401,10 +452,10 @@ public class MainActivity extends BaseActivity implements OnClickListener{
 		}
 	};
 	
-	private OnRefreshListener<ListView> onRefreshListener = new OnRefreshListener<ListView>() {
+	private OnRefreshListener<SwipeMenuListView> onRefreshListener = new OnRefreshListener<SwipeMenuListView>() {
 
 		@Override
-		public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+		public void onRefresh(PullToRefreshBase<SwipeMenuListView> refreshView) {
 			mIdItemPage.init();
 //			ptrlv_idInfo.onRefreshComplete();
 		}

@@ -3,12 +3,18 @@ package com.hai.idmanager.util;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.View.MeasureSpec;
 
-public class HeightUtil {
+/**
+ * 尺寸度量相关工具类
+ * @author Administrator
+ *
+ */
+public class DimensionUtil {
 
 	/**
 	 * 获取状态栏的高度
@@ -68,5 +74,10 @@ public class HeightUtil {
 					MeasureSpec.UNSPECIFIED);
 		}
 		view.measure(childWidthSpec, childHeightSpec);
+	}
+	
+	public static int dp2px(Context context, int dp) {
+		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
+				context.getResources().getDisplayMetrics());
 	}
 }

@@ -1,6 +1,6 @@
 package com.handmark.pulltorefresh.library.swipemenu;
 
-import com.handmark.pulltorefresh.library.PullToRefreshSwipeMenuListView.OnMenuItemClickListener;
+import com.handmark.pulltorefresh.library.swipemenu.SwipeMenuListView.OnMenuItemClickListener;
 import com.handmark.pulltorefresh.library.swipemenu.SwipeMenuView.OnSwipeItemClickListener;
 
 import android.content.Context;

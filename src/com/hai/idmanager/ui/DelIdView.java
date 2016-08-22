@@ -14,17 +14,17 @@ import android.widget.PopupWindow;
 public class DelIdView extends PopupWindow implements OnClickListener{
 	private Context mContext;
 	private OnDelIdListener mDelIdListener;
-	private int mId;
+	private int mPosition;
 	private View view;
 	private int windowHeight;
 	private int windowWidth;
 	
 	private Button btn_delId;
 	
-	public DelIdView(Context context, int id, OnDelIdListener delIdListener){
+	public DelIdView(Context context, int position, OnDelIdListener delIdListener){
 		mContext = context;
 		mDelIdListener = delIdListener;
-		mId = id;
+		mPosition = position;
 		
 		setPopupAttribute();
 		initView();
@@ -52,7 +52,7 @@ public class DelIdView extends PopupWindow implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		if(v == btn_delId){
-			mDelIdListener.onDelId(mId);
+			mDelIdListener.onDelId(mPosition);
 		}
 	}
 	
@@ -62,7 +62,7 @@ public class DelIdView extends PopupWindow implements OnClickListener{
 	 *
 	 */
 	public interface OnDelIdListener{
-		void onDelId(int id);
+		void onDelId(int position);
 	}
 	
 }

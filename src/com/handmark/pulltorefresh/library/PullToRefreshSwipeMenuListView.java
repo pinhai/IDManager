@@ -1,216 +1,315 @@
 package com.handmark.pulltorefresh.library;
 
-import com.handmark.pulltorefresh.library.swipemenu.SwipeMenu;
-import com.handmark.pulltorefresh.library.swipemenu.SwipeMenuAdapter;
-import com.handmark.pulltorefresh.library.swipemenu.SwipeMenuCreator;
-import com.handmark.pulltorefresh.library.swipemenu.SwipeMenuLayout;
-import com.handmark.pulltorefresh.library.swipemenu.SwipeMenuView;
+import com.hai.idmanager.R;
+import com.handmark.pulltorefresh.library.internal.EmptyViewMethodAccessor;
+import com.handmark.pulltorefresh.library.internal.LoadingLayout;
+import com.handmark.pulltorefresh.library.swipemenu.SwipeMenuListView;
 
+import android.annotation.TargetApi;
 import android.content.Context;
-import android.support.v4.view.MotionEventCompat;
+import android.content.res.TypedArray;
+import android.graphics.Canvas;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.util.AttributeSet;
-import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.Interpolator;
+import android.widget.FrameLayout;
 import android.widget.ListAdapter;
 
-public class PullToRefreshSwipeMenuListView extends PullToRefreshListView {
-
-	private static final int TOUCH_STATE_NONE = 0;
-	private static final int TOUCH_STATE_X = 1;
-	private static final int TOUCH_STATE_Y = 2;
-
-	private int MAX_Y = 5;
-	private int MAX_X = 3;
-	private float mDownX;
-	private float mDownY;
-	private int mTouchState;
-	private int mTouchPosition;
-	private SwipeMenuLayout mTouchView;
-	private OnSwipeListener mOnSwipeListener;
-
-	private SwipeMenuCreator mMenuCreator;
-	private OnMenuItemClickListener mOnMenuItemClickListener;
-	private Interpolator mCloseInterpolator;
-	private Interpolator mOpenInterpolator;
+public class PullToRefreshSwipeMenuListView extends PullToRefreshAdapterViewBase<SwipeMenuListView> {
 	
+	private LoadingLayout mHeaderLoadingView;
+	private LoadingLayout mFooterLoadingView;
+
+	private FrameLayout mLvFooterLoadingFrame;
+
+	private boolean mListViewExtrasEnabled;
+
 	public PullToRefreshSwipeMenuListView(Context context) {
 		super(context);
-		init();
 	}
 	
 	public PullToRefreshSwipeMenuListView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		init();
-	}
-
-	private void init() {
-		MAX_X = dp2px(MAX_X);
-		MAX_Y = dp2px(MAX_Y);
-		mTouchState = TOUCH_STATE_NONE;
 	}
 
 	@Override
-	public void setAdapter(ListAdapter adapter) {
-		super.setAdapter(new SwipeMenuAdapter(getContext(), adapter) {
-			@Override
-			public void createMenu(SwipeMenu menu) {
-				if (mMenuCreator != null) {
-					mMenuCreator.create(menu);
-				}
-			}
-
-			@Override
-			public void onItemClick(SwipeMenuView view, SwipeMenu menu,
-					int index) {
-				boolean flag = false;
-				if (mOnMenuItemClickListener != null) {
-					flag = mOnMenuItemClickListener.onMenuItemClick(
-							view.getPosition(), menu, index);
-				}
-				if (mTouchView != null && !flag) {
-					mTouchView.smoothCloseMenu();
-				}
-			}
-		});
-	}
-
-	public void setCloseInterpolator(Interpolator interpolator) {
-		mCloseInterpolator = interpolator;
-	}
-
-	public void setOpenInterpolator(Interpolator interpolator) {
-		mOpenInterpolator = interpolator;
-	}
-
-	public Interpolator getOpenInterpolator() {
-		return mOpenInterpolator;
-	}
-
-	public Interpolator getCloseInterpolator() {
-		return mCloseInterpolator;
+	public com.handmark.pulltorefresh.library.PullToRefreshBase.Orientation getPullToRefreshScrollDirection() {
+		return Orientation.VERTICAL;
 	}
 
 	@Override
-	public boolean onTouchEvent(MotionEvent ev) {
-		if (ev.getAction() != MotionEvent.ACTION_DOWN && mTouchView == null)
-			return super.onTouchEvent(ev);
-		int action = MotionEventCompat.getActionMasked(ev);
-		action = ev.getAction();
-		switch (action) {
-		case MotionEvent.ACTION_DOWN:
-			int oldPos = mTouchPosition;
-			mDownX = ev.getX();
-			mDownY = ev.getY(); 
-			mTouchState = TOUCH_STATE_NONE;
-
-			mTouchPosition = pointToPosition((int) ev.getX(), (int) ev.getY());
-
-			if (mTouchPosition == oldPos && mTouchView != null
-					&& mTouchView.isOpen()) {
-				mTouchState = TOUCH_STATE_X;
-				mTouchView.onSwipe(ev);
-				return true;
-			}
-
-			View view = getChildAt(mTouchPosition - getFirstVisiblePosition());
-
-			if (mTouchView != null && mTouchView.isOpen()) {
-				mTouchView.smoothCloseMenu();
-				mTouchView = null;
-				return super.onTouchEvent(ev);
-			}
-			if (view instanceof SwipeMenuLayout) {
-				mTouchView = (SwipeMenuLayout) view;
-			}
-			if (mTouchView != null) {
-				mTouchView.onSwipe(ev);
-			}
-			break;
-		case MotionEvent.ACTION_MOVE:
-			float dy = Math.abs((ev.getY() - mDownY));
-			float dx = Math.abs((ev.getX() - mDownX));
-			if (mTouchState == TOUCH_STATE_X) {
-				if (mTouchView != null) {
-					mTouchView.onSwipe(ev);
-				}
-				getSelector().setState(new int[] { 0 });
-				ev.setAction(MotionEvent.ACTION_CANCEL);
-				super.onTouchEvent(ev);
-				return true;
-			} else if (mTouchState == TOUCH_STATE_NONE) {
-				if (Math.abs(dy) > MAX_Y) {
-					mTouchState = TOUCH_STATE_Y;
-				} else if (dx > MAX_X) {
-					mTouchState = TOUCH_STATE_X;
-					if (mOnSwipeListener != null) {
-						mOnSwipeListener.onSwipeStart(mTouchPosition);
-					}
-				}
-			}
-			break;
-		case MotionEvent.ACTION_UP:
-			if (mTouchState == TOUCH_STATE_X) {
-				if (mTouchView != null) {
-					mTouchView.onSwipe(ev);
-					if (!mTouchView.isOpen()) {
-						mTouchPosition = -1;
-						mTouchView = null;
-					}
-				}
-				if (mOnSwipeListener != null) {
-					mOnSwipeListener.onSwipeEnd(mTouchPosition);
-				}
-				ev.setAction(MotionEvent.ACTION_CANCEL);
-				super.onTouchEvent(ev);
-				return true;
-			}
-			break;
+	protected void onRefreshing(final boolean doScroll) {
+		/**
+		 * If we're not showing the Refreshing view, or the list is empty, the
+		 * the header/footer views won't show so we use the normal method.
+		 */
+		ListAdapter adapter = mRefreshableView.getAdapter();
+		if (!mListViewExtrasEnabled || !getShowViewWhileRefreshing() || null == adapter || adapter.isEmpty()) {
+			super.onRefreshing(doScroll);
+			return;
 		}
-		return super.onTouchEvent(ev);
-	}
 
-	public void smoothOpenMenu(int position) {
-		if (position >= getFirstVisiblePosition()
-				&& position <= getLastVisiblePosition()) {
-			View view = getChildAt(position - getFirstVisiblePosition());
-			if (view instanceof SwipeMenuLayout) {
-				mTouchPosition = position;
-				if (mTouchView != null && mTouchView.isOpen()) {
-					mTouchView.smoothCloseMenu();
-				}
-				mTouchView = (SwipeMenuLayout) view;
-				mTouchView.smoothOpenMenu();
-			}
+		super.onRefreshing(false);
+
+		final LoadingLayout origLoadingView, listViewLoadingView, oppositeListViewLoadingView;
+		final int selection, scrollToY;
+
+		switch (getCurrentMode()) {
+			case MANUAL_REFRESH_ONLY:
+			case PULL_FROM_END:
+				origLoadingView = getFooterLayout();
+				listViewLoadingView = mFooterLoadingView;
+				oppositeListViewLoadingView = mHeaderLoadingView;
+				selection = mRefreshableView.getCount() - 1;
+				scrollToY = getScrollY() - getFooterSize();
+				break;
+			case PULL_FROM_START:
+			default:
+				origLoadingView = getHeaderLayout();
+				listViewLoadingView = mHeaderLoadingView;
+				oppositeListViewLoadingView = mFooterLoadingView;
+				selection = 0;
+				scrollToY = getScrollY() + getHeaderSize();
+				break;
+		}
+
+		// Hide our original Loading View
+		origLoadingView.reset();
+		origLoadingView.hideAllViews();
+
+		// Make sure the opposite end is hidden too
+		oppositeListViewLoadingView.setVisibility(View.GONE);
+
+		// Show the ListView Loading View and set it to refresh.
+		listViewLoadingView.setVisibility(View.VISIBLE);
+		listViewLoadingView.refreshing();
+
+		if (doScroll) {
+			// We need to disable the automatic visibility changes for now
+			disableLoadingLayoutVisibilityChanges();
+
+			// We scroll slightly so that the ListView's header/footer is at the
+			// same Y position as our normal header/footer
+			setHeaderScroll(scrollToY);
+
+			// Make sure the ListView is scrolled to show the loading
+			// header/footer
+			mRefreshableView.setSelection(selection);
+
+			// Smooth scroll as normal
+			smoothScrollTo(0);
 		}
 	}
 
-	private int dp2px(int dp) {
-		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
-				getContext().getResources().getDisplayMetrics());
+	@Override
+	protected void onReset() {
+		/**
+		 * If the extras are not enabled, just call up to super and return.
+		 */
+		if (!mListViewExtrasEnabled) {
+			super.onReset();
+			return;
+		}
+
+		final LoadingLayout originalLoadingLayout, listViewLoadingLayout;
+		final int scrollToHeight, selection;
+		final boolean scrollLvToEdge;
+
+		switch (getCurrentMode()) {
+			case MANUAL_REFRESH_ONLY:
+			case PULL_FROM_END:
+				originalLoadingLayout = getFooterLayout();
+				listViewLoadingLayout = mFooterLoadingView;
+				selection = mRefreshableView.getCount() - 1;
+				scrollToHeight = getFooterSize();
+				scrollLvToEdge = Math.abs(mRefreshableView.getLastVisiblePosition() - selection) <= 1;
+				break;
+			case PULL_FROM_START:
+			default:
+				originalLoadingLayout = getHeaderLayout();
+				listViewLoadingLayout = mHeaderLoadingView;
+				scrollToHeight = -getHeaderSize();
+				selection = 0;
+				scrollLvToEdge = Math.abs(mRefreshableView.getFirstVisiblePosition() - selection) <= 1;
+				break;
+		}
+
+		// If the ListView header loading layout is showing, then we need to
+		// flip so that the original one is showing instead
+		if (listViewLoadingLayout.getVisibility() == View.VISIBLE) {
+
+			// Set our Original View to Visible
+			originalLoadingLayout.showInvisibleViews();
+
+			// Hide the ListView Header/Footer
+			listViewLoadingLayout.setVisibility(View.GONE);
+
+			/**
+			 * Scroll so the View is at the same Y as the ListView
+			 * header/footer, but only scroll if: we've pulled to refresh, it's
+			 * positioned correctly
+			 */
+			if (scrollLvToEdge && getState() != State.MANUAL_REFRESHING) {
+				mRefreshableView.setSelection(selection);
+				setHeaderScroll(scrollToHeight);
+			}
+		}
+
+		// Finally, call up to super
+		super.onReset();
 	}
 
-	public void setMenuCreator(SwipeMenuCreator menuCreator) {
-		this.mMenuCreator = menuCreator;
+	@Override
+	protected LoadingLayoutProxy createLoadingLayoutProxy(final boolean includeStart, final boolean includeEnd) {
+		LoadingLayoutProxy proxy = super.createLoadingLayoutProxy(includeStart, includeEnd);
+
+		if (mListViewExtrasEnabled) {
+			final Mode mode = getMode();
+
+			if (includeStart && mode.showHeaderLoadingLayout()) {
+				proxy.addLayout(mHeaderLoadingView);
+			}
+			if (includeEnd && mode.showFooterLoadingLayout()) {
+				proxy.addLayout(mFooterLoadingView);
+			}
+		}
+
+		return proxy;
 	}
 
-	public void setOnMenuItemClickListener(
-			OnMenuItemClickListener onMenuItemClickListener) {
-		this.mOnMenuItemClickListener = onMenuItemClickListener;
+	protected SwipeMenuListView createListView(Context context, AttributeSet attrs) {
+		final SwipeMenuListView lv;
+		if (VERSION.SDK_INT >= VERSION_CODES.GINGERBREAD) {
+			lv = new InternalListViewSDK9(context, attrs);
+		} else {
+			lv = new InternalListView(context, attrs);
+		}
+		return lv;
 	}
 
-	public void setOnSwipeListener(OnSwipeListener onSwipeListener) {
-		this.mOnSwipeListener = onSwipeListener;
+	@Override
+	protected SwipeMenuListView createRefreshableView(Context context, AttributeSet attrs) {
+		SwipeMenuListView lv = createListView(context, attrs);
+
+		// Set it to this so it can be used in ListActivity/ListFragment
+		lv.setId(android.R.id.list);
+		return lv;
 	}
 
-	public static interface OnMenuItemClickListener {
-		boolean onMenuItemClick(int position, SwipeMenu menu, int index);
+	@Override
+	protected void handleStyledAttributes(TypedArray a) {
+		super.handleStyledAttributes(a);
+
+		mListViewExtrasEnabled = a.getBoolean(R.styleable.PullToRefresh_ptrListViewExtrasEnabled, true);
+
+		if (mListViewExtrasEnabled) {
+			final FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+					android.view.ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL);
+
+			// Create Loading Views ready for use later
+			FrameLayout frame = new FrameLayout(getContext());
+			mHeaderLoadingView = createLoadingLayout(getContext(), Mode.PULL_FROM_START, a);
+			mHeaderLoadingView.setVisibility(View.GONE);
+			frame.addView(mHeaderLoadingView, lp);
+			mRefreshableView.addHeaderView(frame, null, false);
+
+			mLvFooterLoadingFrame = new FrameLayout(getContext());
+			mFooterLoadingView = createLoadingLayout(getContext(), Mode.PULL_FROM_END, a);
+			mFooterLoadingView.setVisibility(View.GONE);
+			mLvFooterLoadingFrame.addView(mFooterLoadingView, lp);
+
+			/**
+			 * If the value for Scrolling While Refreshing hasn't been
+			 * explicitly set via XML, enable Scrolling While Refreshing.
+			 */
+			if (!a.hasValue(R.styleable.PullToRefresh_ptrScrollingWhileRefreshingEnabled)) {
+				setScrollingWhileRefreshingEnabled(true);
+			}
+		}
+	}
+	
+	@TargetApi(9)
+	final class InternalListViewSDK9 extends InternalListView {
+
+		public InternalListViewSDK9(Context context, AttributeSet attrs) {
+			super(context, attrs);
+		}
+
+		@Override
+		protected boolean overScrollBy(int deltaX, int deltaY, int scrollX, int scrollY, int scrollRangeX,
+				int scrollRangeY, int maxOverScrollX, int maxOverScrollY, boolean isTouchEvent) {
+
+			final boolean returnValue = super.overScrollBy(deltaX, deltaY, scrollX, scrollY, scrollRangeX,
+					scrollRangeY, maxOverScrollX, maxOverScrollY, isTouchEvent);
+
+			// Does all of the hard work...
+			OverscrollHelper.overScrollBy(PullToRefreshSwipeMenuListView.this, deltaX, scrollX, deltaY, scrollY, isTouchEvent);
+
+			return returnValue;
+		}
 	}
 
-	public static interface OnSwipeListener {
-		void onSwipeStart(int position);
+	protected class InternalListView extends SwipeMenuListView implements EmptyViewMethodAccessor {
 
-		void onSwipeEnd(int position);
+		private boolean mAddedLvFooter = false;
+
+		public InternalListView(Context context, AttributeSet attrs) {
+			super(context, attrs);
+		}
+
+		@Override
+		protected void dispatchDraw(Canvas canvas) {
+			/**
+			 * This is a bit hacky, but Samsung's ListView has got a bug in it
+			 * when using Header/Footer Views and the list is empty. This masks
+			 * the issue so that it doesn't cause an FC. See Issue #66.
+			 */
+			try {
+				super.dispatchDraw(canvas);
+			} catch (IndexOutOfBoundsException e) {
+				e.printStackTrace();
+			}
+		}
+
+		@Override
+		public boolean dispatchTouchEvent(MotionEvent ev) {
+			/**
+			 * This is a bit hacky, but Samsung's ListView has got a bug in it
+			 * when using Header/Footer Views and the list is empty. This masks
+			 * the issue so that it doesn't cause an FC. See Issue #66.
+			 */
+			try {
+				return super.dispatchTouchEvent(ev);
+			} catch (IndexOutOfBoundsException e) {
+				e.printStackTrace();
+				return false;
+			}
+		}
+
+		@Override
+		public void setAdapter(ListAdapter adapter) {
+			// Add the Footer View at the last possible moment
+			if (null != mLvFooterLoadingFrame && !mAddedLvFooter) {
+				addFooterView(mLvFooterLoadingFrame, null, false);
+				mAddedLvFooter = true;
+			}
+
+			super.setAdapter(adapter);
+		}
+
+		@Override
+		public void setEmptyView(View emptyView) {
+			PullToRefreshSwipeMenuListView.this.setEmptyView(emptyView);
+		}
+
+		@Override
+		public void setEmptyViewInternal(View emptyView) {
+			super.setEmptyView(emptyView);
+		}
+
 	}
+
 }
