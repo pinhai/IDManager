@@ -14,7 +14,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -267,16 +266,12 @@ public class MainActivity extends BaseActivity implements OnClickListener{
 	private void showSearchIdWindow() {
 		searchIdInfoView = new SearchIdInfoView(this, dbHelper, new com.hai.idmanager.ui.SearchIdInfoView.OnItemListener() {
 			@Override
-			public void onClick(int position) {
+			public void onClick(int id) {
 				searchIdInfoView.dismiss();
-				IdModel idModel = dbHelper.queryIdInfoById(mIdModels.get(position).getId());
+				IdModel idModel = dbHelper.queryIdInfoById(id);
 				startEditIdActivityForResult(idModel);
 			}
 
-			@Override
-			public void onDelete(int position) {
-				deleteItem(position);
-			}
 		});
 		searchIdInfoView.clearEditText();
 		searchIdInfoView.showAtLocation(getView(), Gravity.BOTTOM, 0, 0);

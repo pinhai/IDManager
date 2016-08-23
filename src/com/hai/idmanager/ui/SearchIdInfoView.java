@@ -116,6 +116,20 @@ public class SearchIdInfoView extends PopupWindow implements OnClickListener{
 		return viewHeight;
 	}
 	
+	private void deleteItem(int position){
+		if(mDbHelper.delIdInfo(idModels.get(position).getId())){
+			idModels.remove(position);
+			idListAdapter.notifyDataSetChanged();
+			Toast.makeText(mContext, "删除账号成功", Toast.LENGTH_SHORT).show();
+			if(idModels.size() == 0){
+				lv_searchingId.setVisibility(View.GONE);
+				iv_envelop.setVisibility(View.VISIBLE);
+			}
+		}else{
+			Toast.makeText(mContext, "删除账号失败", Toast.LENGTH_SHORT).show();
+		}
+	}
+	
 	TextWatcher textWatcher = new TextWatcher() {
 		@Override
 		public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -170,13 +184,7 @@ public class SearchIdInfoView extends PopupWindow implements OnClickListener{
 		public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
 			switch (index) {
 			case 0:
-				mOnItemListener.onDelete(position);
-				idModels.remove(position);
-				idListAdapter.notifyDataSetChanged();
-				if(idModels.size() == 0){
-					lv_searchingId.setVisibility(View.GONE);
-					iv_envelop.setVisibility(View.VISIBLE);
-				}
+				deleteItem(position);
 				break;
 
 			default:
@@ -192,13 +200,12 @@ public class SearchIdInfoView extends PopupWindow implements OnClickListener{
 				long id) {
 			Object tem = parent.getAdapter().getItem(position);
 			if(tem instanceof IdModel){
-				mOnItemListener.onClick(position);
+				mOnItemListener.onClick(((IdModel)tem).getId());
 			}
 		}
 	};
 	
 	public interface OnItemListener{
-		void onClick(int position);
-		void onDelete(int position);
+		void onClick(int id);
 	}
 }
